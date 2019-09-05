@@ -3,22 +3,18 @@ package com.example.epos.Activities;
  * Application created to quickly add an item to an ordering list using the item's barcode. This will make it easier for the business to order items that they need
  *
  */
-
-import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.util.SparseArray;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.epos.R;
 import com.google.zxing.Result;
@@ -28,8 +24,6 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-
-import java.io.IOException;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,8 +49,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     /**
      * the toolbar of the activity
      */
-    //private Toolbar toolbar;
-
+    private Toolbar toolbar;
 
     private Button btnBarcode;
     private Button btnScan;
@@ -69,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     /**
      * Add items to the navigation menu
-     *
+     */
     public void navbar_setup() {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Add to Order");
@@ -117,14 +110,19 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 })
                 .build();
     }
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUp();
+        navbar_setup();
+        
+    }
+
+    public void setUp() {
         setContentView(R.layout.activity_main);
-        //toolbar = (Toolbar)findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //navbar_setup();
 
@@ -153,18 +151,17 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkPermission()) {
-                        Toasty.success(MainActivity.this, "Permission Granted", Toast.LENGTH_LONG, true).show();
+                        Toasty.info(MainActivity.this, "Scan a barcode", Toast.LENGTH_LONG, true).show();
                     } else {
+                       // Toasty.info(MainActivity.this, "2", Toast.LENGTH_LONG, true).show();
                         requestPermission();
                     }
                 }
                 setContentView(scannerView);
+
             }
         });
-
-
     }
-
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(MainActivity.this, CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
@@ -222,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public void onDestroy() {
         super.onDestroy();
         scannerView.stopCamera();
+        setUp();
     }
 
     public void displayAlertMessage(String message, DialogInterface.OnClickListener listener) {
@@ -239,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         String scanResult = result.getText();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         scannerView.stopCamera();
-        setContentView(R.layout.activity_main);
+        setUp();
         builder.setTitle("Product Information");
         builder.setPositiveButton("Add to list", new DialogInterface.OnClickListener() {
             @Override
