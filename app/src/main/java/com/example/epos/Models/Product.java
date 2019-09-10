@@ -7,6 +7,7 @@ public class Product implements Serializable {
     private String name;
     private String category;
     private String price;
+    private String additional;
 
     public Product(String barcode, String name, String category, String price) {
         this.barcode = barcode;
@@ -25,6 +26,14 @@ public class Product implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getAdditional() {
+        return additional;
+    }
+
+    public void setAdditional(String additional) {
+        this.additional = additional;
     }
 
     public void setName(String name) {
