@@ -4,11 +4,11 @@ package com.example.epos.Activities;
  *
  */
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.epos.AsyncTasks.GetInfoTask;
+import com.example.epos.Dialog.InfoDialog;
 import com.example.epos.R;
 import com.google.zxing.Result;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -53,12 +55,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private Button btnBarcode;
     private Button btnScan;
+    private Button btnAdd;
 
     private EditText txtBarcode;
 
     private ImageView example;
 
-    private SurfaceView camera;
 
     /**
      * Add items to the navigation menu
@@ -66,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public void navbar_setup() {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Add to Order");
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName("To Order");
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(5).withName("All Products");
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName("Order List");
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("All Products");
 
         AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -101,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                                 break;
                             case 3:
                                 result.closeDrawer();
-                                //Intent addRecipeIntent = new Intent(HomeActivity.this, AddRecipeActivity.class);
-                                //startActivity(addRecipeIntent);
+                                Intent productList = new Intent(MainActivity.this, ProductListActivity.class);
+                                startActivity(productList);
                                 break;
                         }
                         return true;
@@ -114,25 +116,31 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setUp();
-        navbar_setup();
-        
-    }
-
-    public void setUp() {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //navbar_setup();
+
+
+        navbar_setup();
+
 
         btnBarcode = (Button) findViewById(R.id.btnAdd);
         btnScan = (Button) findViewById(R.id.btnScan);
+        btnAdd = (Button) findViewById(R.id.btnAddProduct);
         txtBarcode = (EditText) findViewById(R.id.txtBarcode);
-        camera = (SurfaceView) findViewById(R.id.camera);
         example = (ImageView) findViewById(R.id.example);
-        scannerView = new ZXingScannerView(this);
+        scannerView = new ZXingScannerView(MainActivity.this);
 
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //args.putString("Image", this.url);
+                InfoDialog dialog = new InfoDialog();
+                dialog.show(getSupportFragmentManager(), "InfoDialog");
+            }
+        });
 
 
         btnBarcode.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     if (checkPermission()) {
                         Toasty.info(MainActivity.this, "Scan a barcode", Toast.LENGTH_LONG, true).show();
                     } else {
-                       // Toasty.info(MainActivity.this, "2", Toast.LENGTH_LONG, true).show();
+                        // Toasty.info(MainActivity.this, "2", Toast.LENGTH_LONG, true).show();
                         requestPermission();
                     }
                 }
@@ -161,6 +169,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
             }
         });
+    }
+
+    public void setUp() {
+
     }
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(MainActivity.this, CAMERA) == PackageManager.PERMISSION_GRANTED);
@@ -235,32 +247,22 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(Result result) {
         String scanResult = result.getText();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+       // AlertDialog.Builder builder = new AlertDialog.Builder(this);
         scannerView.stopCamera();
         setUp();
-        builder.setTitle("Product Information");
-        builder.setPositiveButton("Add to list", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toasty.success(MainActivity.this, "Added to list", Toast.LENGTH_LONG, true).show();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
-        builder.setMessage(getProductInformation(scanResult));
-
-        AlertDialog alert = builder.create();
-        alert.show();
-
+        new GetInfoTask(MainActivity.this, scanResult, TAG).execute();
     }
 
-    public String getProductInformation(String id) {
-        StringBuffer stringBuffer = new StringBuffer("Product ID: ");
-        stringBuffer.append(id);
-        return stringBuffer.toString();
+
+    @Override
+    public void onBackPressed() {
+        if (scannerView != null) {
+            scannerView.stopCamera();
+            startActivity(new Intent(this, MainActivity.class));
+            this.finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
