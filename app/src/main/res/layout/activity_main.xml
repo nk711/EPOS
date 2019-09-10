@@ -8,92 +8,132 @@
     android:orientation="vertical"
     tools:context=".Activities.MainActivity">
 
-
-    <ImageView
-        android:id = "@+id/example"
-        android:layout_width="wrap_content"
-        android:layout_height="317dp"
-        android:src="@drawable/barcode" />
-
-    <SurfaceView
-        android:id = "@+id/camera"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/btnScan"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/button"
-        android:text="Start Scanning"
-        android:textColor="@color/white" />
+        android:background="@color/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            app:title="@string/app_name"
+            app:titleTextColor="#FFFFFF"
+            android:theme="@style/AppTheme.PopupOverlay">
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop ="15dp"
-        android:layout_marginStart = "20dp"
-        android:layout_marginEnd = "20dp"
-        android:layout_gravity = "center_vertical|center_horizontal"
-        android:layout_below="@+id/btnScan">
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/or"
-            android:layout_alignParentStart = "true"
-            android:layout_marginEnd="10dp"
-            android:background="@android:color/darker_gray"/>
-
-        <TextView
-            android:id="@+id/or"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent = "true"
-            android:text="OR"
-            android:textColor="@color/TitleColour" />
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/or"
-            android:layout_marginStart="10dp"
-            android:background="@android:color/darker_gray"/>
-
-    </RelativeLayout>
-
-    <EditText
-        android:id="@+id/txtBarcode"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_weight="0"
-        android:background="@drawable/fields"
-        android:ems="10"
-        android:paddingEnd = "10dp"
-        android:hint="Manually enter product barcode"
-        android:inputType="textEmailAddress"
-        tools:ignore="Autofill,RtlSymmetry" />
+            android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/button"
-        android:text="Add product to order list"
-        android:textColor="@color/white" />
+            <ImageView
+                android:id="@+id/example"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:adjustViewBounds="false"
+                android:cropToPadding="true"
+                android:src="@drawable/barcode" />
+
+            <SurfaceView
+                android:id = "@+id/camera"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btnScan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/button"
+                android:text="Start Scanning"
+                android:textColor="@color/white" />
+
+
+            <RelativeLayout
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop ="15dp"
+                android:layout_marginStart = "20dp"
+                android:layout_marginEnd = "20dp"
+                android:layout_gravity = "center_vertical|center_horizontal"
+                android:layout_below="@+id/btnScan">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/or"
+                    android:layout_alignParentStart = "true"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <TextView
+                    android:id="@+id/or"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent = "true"
+                    android:text="OR"
+                    android:textColor="@color/TitleColour" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/or"
+                    android:layout_marginStart="10dp"
+                    android:background="@android:color/darker_gray"/>
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/txtBarcode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_weight="0"
+                android:background="@drawable/fields"
+                android:ems="10"
+                android:paddingEnd = "10dp"
+                android:hint="Manually enter product barcode"
+                android:inputType="textEmailAddress"
+                tools:ignore="Autofill,RtlSymmetry" />
+
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/button"
+                android:text="Add product to order list"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnAddProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/button"
+                android:text="Manually add a product"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
 </LinearLayout>

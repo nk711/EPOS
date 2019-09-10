@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Product Information"
+            android:textColor="@color/colorAccentDark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/edit_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Edit "
+            android:textColor="@color/colorDarkerGrey"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/edit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/txtName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:enabled="false"
+            android:background="@drawable/fields"
+            android:hint="Change Product Name"
+            android:paddingStart="20dp"
+            android:paddingEnd="10dp" />
+
+
+        <EditText
+            android:id="@+id/txtCategory"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:enabled="false"
+            android:background="@drawable/fields"
+            android:hint="Change Product Category"
+            android:paddingStart="20dp"
+            android:paddingEnd="10dp" />
+
+        <EditText
+            android:id="@+id/txtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:enabled="false"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/fields"
+            android:hint="Change Product Price"
+            android:paddingStart="20dp"
+            android:paddingEnd="10dp" />
+
+    </LinearLayout>
+
+    <!--
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside" /> -->
+
+    <EditText
+        android:id="@+id/txtAdditional"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:enabled="false"
+        android:background="@drawable/fields"
+        android:hint="Add Additional Information"
+        android:paddingStart="20dp"
+        android:paddingEnd="10dp" />
+
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorField"
+        android:entries="@array/categories"
+        android:prompt="@string/select_group"
+        android:textSize="17sp" />
+
+
+</LinearLayout>
