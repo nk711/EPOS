@@ -14,6 +14,7 @@
     <color name="background">#33FF9052</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="colorField">#F6F6F6</color>
+    <color name="colorFieldDarker">#D2F6F6F6</color>
     <color name="star">#FFC052</color>
     <color name="colorTransparentBar">#e5c9ccce</color>
 </resources>

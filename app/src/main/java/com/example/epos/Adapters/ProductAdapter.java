@@ -3,8 +3,10 @@
  */
 package com.example.epos.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +14,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.epos.Activities.MainActivity;
+import com.example.epos.Dialog.InfoDialog;
 import com.example.epos.Models.Product;
 import com.example.epos.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -111,6 +116,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
 
+
     /**
      * Defines the attributes and behaviour of a view holder
      */
@@ -125,26 +131,39 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public TextView product_desc;
         public TextView product_category;
         public ImageView btnDelete;
-        public LinearLayout background;
+        public LinearLayout row;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mView= itemView;
             /** Initialising the components of the view */
+             row = (LinearLayout) mView.findViewById(R.id.row);
              product_name = (TextView) mView.findViewById(R.id.txtName);
              product_desc = (TextView) mView.findViewById(R.id.txtPrice);
              product_category = (TextView) mView.findViewById(R.id.txtCategory);
-             background = (LinearLayout) mView.findViewById(R.id.background);
-            /**
-             * Pressing the remove button on a specific row will delete that specific row
-             *
-            btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    delete(getAdapterPosition());
-                }
-            });
-             */
+
+             row.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     try {
+                         Product product = products.get(getAdapterPosition());
+                         Bundle args = new Bundle();
+                         args.putSerializable("Product", product);
+
+                         InfoDialog dialog = new InfoDialog();
+                         dialog.setArguments(args);
+                         dialog.show( ((AppCompatActivity)context).getSupportFragmentManager(), "InfoDialog");
+
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+                 }
+             });
+        }
+
+        public void getActivity() {
+
+
         }
     }
 }

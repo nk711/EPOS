@@ -18,6 +18,7 @@ import com.example.epos.AsyncTasks.ParseJSONTask;
 import com.example.epos.Models.Utility;
 import com.example.epos.R;
 import com.example.epos.Layout.FastScroller;
+import com.google.api.MonitoredResource;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -87,8 +88,8 @@ public class ProductListActivity extends AppCompatActivity {
                                 break;
                             case 2:
                                 result.closeDrawer();
-                                // Intent shoppingListIntent = new Intent(HomeActivity.this, ShoppingList.class);
-                                //startActivity(shoppingListIntent);
+                                Intent orderList = new Intent(ProductListActivity.this, OrderListActivity.class);
+                                startActivity(orderList);
                                 break;
                             case 3:
                                 result.closeDrawer();

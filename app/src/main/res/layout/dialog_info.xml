@@ -38,11 +38,17 @@
         <EditText
             android:id="@+id/txtName"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:inputType="textMultiLine"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:enabled="false"
             android:background="@drawable/fields"
+            android:maxLength="2000"
+            android:maxLines="4"
             android:hint="Change Product Name"
+            android:textSize="18sp"
             android:paddingStart="20dp"
             android:paddingEnd="10dp" />
 
@@ -50,22 +56,33 @@
         <EditText
             android:id="@+id/txtCategory"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
             android:layout_marginTop="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:enabled="false"
             android:background="@drawable/fields"
             android:hint="Change Product Category"
+            android:maxLength="2000"
+            android:maxLines="2"
+            android:textSize="18sp"
             android:paddingStart="20dp"
             android:paddingEnd="10dp" />
 
         <EditText
             android:id="@+id/txtPrice"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:enabled="false"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/fields"
             android:hint="Change Product Price"
+            android:textSize="18sp"
+            android:maxLength="10"
+            android:maxLines="1"
             android:paddingStart="20dp"
             android:paddingEnd="10dp" />
 
@@ -81,8 +98,14 @@
     <EditText
         android:id="@+id/txtAdditional"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:inputType="textMultiLine"
+        android:textSize="18sp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:maxLength="2000"
+        android:maxLines="4"
         android:enabled="false"
         android:background="@drawable/fields"
         android:hint="Add Additional Information"
@@ -91,13 +114,17 @@
 
 
     <Spinner
+        android:id="@+id/txtGroup"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:layout_marginTop="10dp"
         android:background="@color/colorField"
         android:entries="@array/categories"
-        android:prompt="@string/select_group"
-        android:textSize="17sp" />
+
+        android:textSize="18sp" />
 
 
 </LinearLayout>

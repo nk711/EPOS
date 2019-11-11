@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "604644392599-f9nupfujlc364leoqvps2c2r1llnjssa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.epos",
+            "certificate_hash": "43df11af4c40db0e6313b62e848f9fc61946b82f"
+          }
+        },
+        {
           "client_id": "604644392599-p39j448sc7j7e33c0fa6blj45ufa0br7.apps.googleusercontent.com",
           "client_type": 3
         }

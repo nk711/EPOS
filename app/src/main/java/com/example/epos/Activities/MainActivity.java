@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.epos.AsyncTasks.GetInfoTask;
 import com.example.epos.Dialog.InfoDialog;
 import com.example.epos.R;
+import com.google.firebase.FirebaseApp;
 import com.google.zxing.Result;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -38,6 +39,7 @@ import static android.Manifest.permission.CAMERA;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private static final String TAG = "MainActivity";
+
     private static final String REGEX = "[0-9]+";
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
      * Add items to the navigation menu
      */
     public void navbar_setup() {
-        //if you want to update the items at a later time it is recommended to keep it in a variable
+                //if you want to update the items at a later time it is recommended to keep it in a variable
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Add to Order");
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName("Order List");
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("All Products");
@@ -95,11 +97,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
                                 result.closeDrawer();
+
                                 break;
                             case 2:
                                 result.closeDrawer();
-                                // Intent shoppingListIntent = new Intent(HomeActivity.this, ShoppingList.class);
-                                //startActivity(shoppingListIntent);
+                                Intent orderList = new Intent(MainActivity.this, OrderListActivity.class);
+                                startActivity(orderList);
                                 break;
                             case 3:
                                 result.closeDrawer();
@@ -116,64 +119,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-
-
-        navbar_setup();
-
-
-        btnBarcode = (Button) findViewById(R.id.btnAdd);
-        btnScan = (Button) findViewById(R.id.btnScan);
-        btnAdd = (Button) findViewById(R.id.btnAddProduct);
-        txtBarcode = (EditText) findViewById(R.id.txtBarcode);
-        example = (ImageView) findViewById(R.id.example);
-        scannerView = new ZXingScannerView(MainActivity.this);
-
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //args.putString("Image", this.url);
-                InfoDialog dialog = new InfoDialog();
-                dialog.show(getSupportFragmentManager(), "InfoDialog");
-            }
-        });
-
-
-        btnBarcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String barcode = txtBarcode.getText().toString();
-                if (barcode.isEmpty() || !barcode.matches(REGEX)) {
-                    Toasty.error(MainActivity.this, "Invalid Barcode, use the example above to help you", Toast.LENGTH_LONG, true).show();
-                }
-            }
-        });
-
-
-        btnScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkPermission()) {
-                        Toasty.info(MainActivity.this, "Scan a barcode", Toast.LENGTH_LONG, true).show();
-                    } else {
-                        // Toasty.info(MainActivity.this, "2", Toast.LENGTH_LONG, true).show();
-                        requestPermission();
-                    }
-                }
-                setContentView(scannerView);
-
-            }
-        });
-    }
-
-    public void setUp() {
+        build();
 
     }
+
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(MainActivity.this, CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
@@ -231,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public void onDestroy() {
         super.onDestroy();
         scannerView.stopCamera();
-        setUp();
     }
 
     public void displayAlertMessage(String message, DialogInterface.OnClickListener listener) {
@@ -247,22 +196,82 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(Result result) {
         String scanResult = result.getText();
-
        // AlertDialog.Builder builder = new AlertDialog.Builder(this);
         scannerView.stopCamera();
-        setUp();
         new GetInfoTask(MainActivity.this, scanResult, TAG).execute();
     }
 
 
     @Override
     public void onBackPressed() {
-        if (scannerView != null) {
+        if (scannerView.isEnabled()) {
             scannerView.stopCamera();
-            startActivity(new Intent(this, MainActivity.class));
-            this.finish();
+            this.refresh();
         } else {
             super.onBackPressed();
         }
     }
+
+    public void build() {
+        setContentView(R.layout.activity_main);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        navbar_setup();
+
+        btnBarcode = (Button) findViewById(R.id.btnAdd);
+        btnScan = (Button) findViewById(R.id.btnScan);
+        btnAdd = (Button) findViewById(R.id.btnAddProduct);
+        txtBarcode = (EditText) findViewById(R.id.txtBarcode);
+        example = (ImageView) findViewById(R.id.example);
+        scannerView = new ZXingScannerView(MainActivity.this);
+        scannerView.setEnabled(false);
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //args.putString("Image", this.url);
+                InfoDialog dialog = new InfoDialog();
+                dialog.show(getSupportFragmentManager(), "InfoDialog");
+            }
+        });
+
+        btnBarcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String barcode= txtBarcode.getText().toString();
+                if (barcode.isEmpty() || !barcode.matches(REGEX)) {
+                    Toasty.error(MainActivity.this, "Invalid Barcode, use the example above to help you", Toast.LENGTH_LONG, true).show();
+                } else {
+                    new GetInfoTask(MainActivity.this, barcode, TAG).execute();
+                }
+            }
+        });
+
+        btnScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkPermission()) {
+                        Toasty.info(MainActivity.this, "Scan a barcode", Toast.LENGTH_LONG, true).show();
+                    } else {
+                        // Toasty.info(MainActivity.this, "2", Toast.LENGTH_LONG, true).show();
+                        requestPermission();
+                    }
+                }
+                scannerView.setEnabled(true);
+                setContentView(scannerView);
+            }
+        });
+    }
+
+    public void refresh() {
+        Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(intent);
+    }
+
 }

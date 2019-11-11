@@ -1,4 +1,5 @@
 package com.example.epos.AsyncTasks;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -29,6 +30,10 @@ public class GetInfoTask extends AsyncTask<Void, Void, Product> {
     private String barcode;
     private String tag;
 
+    /** dialog will be displayed till the task is added */
+    private ProgressDialog mProgressDialog = null;
+
+
 
     public GetInfoTask(Context context, String barcode, String tag) {
         this.mContext = context;
@@ -39,6 +44,9 @@ public class GetInfoTask extends AsyncTask<Void, Void, Product> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        mProgressDialog = new ProgressDialog(mContext);
+        mProgressDialog.setMessage("Retrieving data..");
+        mProgressDialog.show();
     }
 
     @Override
@@ -68,6 +76,7 @@ public class GetInfoTask extends AsyncTask<Void, Void, Product> {
                     this.product = item;
                   //  this.url = getImage();
                     break;
+
                 }
             }
         } catch (IOException e) {
@@ -75,6 +84,7 @@ public class GetInfoTask extends AsyncTask<Void, Void, Product> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return this.product;
     }
 
@@ -86,11 +96,10 @@ public class GetInfoTask extends AsyncTask<Void, Void, Product> {
             args.putSerializable("Product", product);
           //args.putString("Image", this.url);
             final MainActivity activity = (MainActivity) mContext;
+            mProgressDialog.dismiss();
             InfoDialog dialog = new InfoDialog();
-
             dialog.setArguments(args);
             dialog.show(activity.getSupportFragmentManager(), "InfoDialog");
-
         } catch (ClassCastException e) {
             Log.d("GetInfoTask", "Can't get the fragment manager with this");
         }

@@ -4,6 +4,9 @@
     <string name="select_group">Select Group</string>
 
     <string-array name="categories">
+        <item>Select a group</item>
+        <item>Groceries</item>
+        <item>Sweets/Crisps</item>
         <item>Cans</item>
         <item>500ml</item>
         <item>1 Litre</item>
